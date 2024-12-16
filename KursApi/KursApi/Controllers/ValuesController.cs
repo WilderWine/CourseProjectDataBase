@@ -8,9 +8,11 @@ using System.Web.Http;
 
 namespace KursApi.Controllers
 {
+    //[RoutePrefix("api/users")]
     public class ValuesController : ApiController
     {
         // GET api/values
+        
         public IEnumerable<string> Get()
         {
             string connectionString = "Host=localhost;Port=5433;Username=postgres;Password=ctrl_V_insert_0;Database=Lombard";

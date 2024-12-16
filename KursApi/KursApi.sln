@@ -5,7 +5,9 @@ VisualStudioVersion = 17.4.33213.308
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KursApi", "KursApi\KursApi.csproj", "{823844CC-5B78-4665-A145-172ED168BAF0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KursUI", "KursUI\KursUI.csproj", "{0DB617CB-E630-4EAA-AD88-32503DD5D0AA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KursUI", "KursUI\KursUI.csproj", "{0DB617CB-E630-4EAA-AD88-32503DD5D0AA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DbModels", "DbModels\DbModels.csproj", "{6C435913-0763-417E-9D7E-B43C91351715}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,6 +25,10 @@ Global
 		{0DB617CB-E630-4EAA-AD88-32503DD5D0AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0DB617CB-E630-4EAA-AD88-32503DD5D0AA}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0DB617CB-E630-4EAA-AD88-32503DD5D0AA}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{6C435913-0763-417E-9D7E-B43C91351715}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6C435913-0763-417E-9D7E-B43C91351715}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6C435913-0763-417E-9D7E-B43C91351715}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6C435913-0763-417E-9D7E-B43C91351715}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
