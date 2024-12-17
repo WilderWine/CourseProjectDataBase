@@ -10,6 +10,7 @@ using System.Security.Cryptography;
 using System.IO;
 using Microsoft.Extensions.Configuration;
 using System.Windows.Markup;
+using KursUI.Services;
 
 namespace KursUI
 {
@@ -27,7 +28,7 @@ namespace KursUI
                 });
 
             HttpClient client = new HttpClient();
-            var h = fget(client);
+            var h = fget();
             int a = 5;
             int b = 5;
 
@@ -35,13 +36,15 @@ namespace KursUI
             return builder.Build();
         }
 
-        async static Task<HttpResponseMessage> fget(HttpClient client)
+         static HttpResponseMessage fget()
         {
-            var response = await client.GetAsync("https://localhost:44300/api/values");
+            ApiService service = new ApiService();
 
-            var j = response.Content.ReadAsStringAsync();
+            var f = service.GetAuctionsAsync().Result;
+            
 
-            return response;
+            
+            return new HttpResponseMessage();
         }
     }
 }

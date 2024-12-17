@@ -1,4 +1,5 @@
-﻿namespace KursUI
+﻿
+namespace KursUI
 {
     public partial class MainPage : ContentPage
     {
@@ -11,6 +12,7 @@
 
         private void OnCounterClicked(object sender, EventArgs e)
         {
+            
             count++;
 
             if (count == 1)

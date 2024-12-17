@@ -17,10 +17,10 @@ namespace KursApi.Controllers
         // GET api/cards/1
         [HttpGet]
        // [Route("{id:int}")]
-        public List<Card> GetCards(int u_id) 
+        public string GetCardsAsync(int u_id) 
         {
+            try { 
             string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
-
             string k = "";
             using (var connection = new NpgsqlConnection(connectionString))
             {
@@ -41,130 +41,123 @@ namespace KursApi.Controllers
                 connection.Close();
             }
 
-            try
-            {
-                List<Card> userLogs = JsonSerializer.Deserialize<List<Card>>(k);
-                return userLogs;
+                return k;
             }
             catch (Exception e)
             {
-                return new List<Card>();
+                return "ERR";
             }
         }
 
         [HttpPost]
         [Route("deduct")]
 
-        public bool DeductFromCard([FromUri] string number = null, [FromUri] double? value = null)
+        // api/cards/deduct?number=dfbdjfbdjb&value=45.4
+        public string DeductFromCard([FromUri] string number = null, [FromUri] double? value = null)
         {
-            if (value == null || number == null)
-            {
-                return false;
-            }
-            string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
-
-            string k = "";
-            using (var connection = new NpgsqlConnection(connectionString))
-            {
-                connection.Open();
-
-                var command = new NpgsqlCommand($"SELECT deduct_from_card('{number}', {value.ToString().Replace(',', '.')});", connection);
-                using (var reader = command.ExecuteReader())
+            try { 
+                if (value == null || number == null)
                 {
-                    while (reader.Read())
+                    return "{\"success\" : false}";
+                }
+                string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+
+                string k = "";
+                using (var connection = new NpgsqlConnection(connectionString))
+                {
+                    connection.Open();
+
+                    var command = new NpgsqlCommand($"SELECT deduct_from_card('{number}', {value.ToString().Replace(',', '.')});", connection);
+                    using (var reader = command.ExecuteReader())
                     {
-                        if (!reader.IsDBNull(0)) // 0 - индекс первого столбца
+                        while (reader.Read())
                         {
-                            k += reader.GetString(0);
+                            if (!reader.IsDBNull(0)) // 0 - индекс первого столбца
+                            {
+                                k += reader.GetString(0);
+                            }
                         }
                     }
+                    connection.Close();
                 }
-                connection.Close();
-            }
-            try
-            {
-                BoolResult success = JsonSerializer.Deserialize<BoolResult>(k);
-                return success.success;
+                return k;
             }
             catch (Exception e)
             {
-                return false;
+                return "{\"success\" : false}";
             }
         }
 
         [HttpPost]
         [Route("credit")]
-
-        public bool CreditToCard([FromUri] string number = null, [FromUri] double? value = null)
+        // api/cards/credit?number=dfbdjfbdjb&value=45.4
+        public string CreditToCard([FromUri] string number = null, [FromUri] double? value = null)
         {
-            if (value == null || number == null)
-            {
-                return false;
-            }
-            string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
-
-            string k = "";
-            using (var connection = new NpgsqlConnection(connectionString))
-            {
-                connection.Open();
-
-                var command = new NpgsqlCommand($"SELECT credit_to_card('{number}', {value.ToString().Replace(',', '.')});", connection);
-                using (var reader = command.ExecuteReader())
+            try { 
+                if (value == null || number == null)
                 {
-                    while (reader.Read())
+                    return "{\"success\" : false}";
+                }
+                string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+
+                string k = "";
+                using (var connection = new NpgsqlConnection(connectionString))
+                {
+                    connection.Open();
+
+                    var command = new NpgsqlCommand($"SELECT credit_to_card('{number}', {value.ToString().Replace(',', '.')});", connection);
+                    using (var reader = command.ExecuteReader())
                     {
-                        if (!reader.IsDBNull(0)) // 0 - индекс первого столбца
+                        while (reader.Read())
                         {
-                            k += reader.GetString(0);
+                            if (!reader.IsDBNull(0)) // 0 - индекс первого столбца
+                            {
+                                k += reader.GetString(0);
+                            }
                         }
                     }
+                    connection.Close();
                 }
-                connection.Close();
-            }
-            try
-            {
-                BoolResult success = JsonSerializer.Deserialize<BoolResult>(k);
-                return success.success;
+                return k;
             }
             catch (Exception e)
             {
-                return false;
+                return "{\"success\" : false}";
             }
         }
 
         [HttpPost]
         [Route("add")]
-        public bool AddUser([FromUri] string number = null, [FromUri] int u_id = 1, [FromUri] double remain = 0)
+        // api/cards/add?number=dfbdjfbdjb&u_id=1&remain=5645.58
+        public string AddUser([FromUri] string number = null, [FromUri] int u_id = 1, [FromUri] double remain = 0)
         {
-            if (number == null) return false;
-            string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            try { 
+                if (number == null) return  "{\"success\" : false}"; ;
+                string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
 
-            string k = "";
-            using (var connection = new NpgsqlConnection(connectionString))
-            {
-                connection.Open();
-
-                var command = new NpgsqlCommand($"SELECT create_card('{number}',{remain.ToString().Replace(',', '.')}, {u_id});", connection);
-                using (var reader = command.ExecuteReader())
+                string k = "";
+                using (var connection = new NpgsqlConnection(connectionString))
                 {
-                    while (reader.Read())
+                    connection.Open();
+
+                    var command = new NpgsqlCommand($"SELECT create_card('{number}',{remain.ToString().Replace(',', '.')}, {u_id});", connection);
+                    using (var reader = command.ExecuteReader())
                     {
-                        if (!reader.IsDBNull(0)) // 0 - индекс первого столбца
+                        while (reader.Read())
                         {
-                            k += reader.GetString(0);
+                            if (!reader.IsDBNull(0)) // 0 - индекс первого столбца
+                            {
+                                k += reader.GetString(0);
+                            }
                         }
                     }
+                    connection.Close();
                 }
-                connection.Close();
-            }
-            try
-            {
-                BoolResult success = JsonSerializer.Deserialize<BoolResult>(k);
-                return success.success;
+                return k;
             }
             catch (Exception e)
             {
-                return false;
+                return "{\"success\" : false}";
             }
         }
 

@@ -8,6 +8,7 @@ using System.Web.Http;
 using DbModels;
 using Npgsql;
 using System.Text.Json;
+using System.Reflection.Metadata.Ecma335;
 
 namespace KursApi.Controllers
 {
@@ -15,421 +16,411 @@ namespace KursApi.Controllers
     public class ProductsController : ApiController
     {
         [HttpGet]
-        public List<Product> GetProducts()
+        // api/products
+        public string GetProducts()
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
-
-            string k = "";
-            using (var connection = new NpgsqlConnection(connectionString))
-            {
-                connection.Open();
-                var command = new NpgsqlCommand("SELECT get_products_json();", connection);
-                using (var reader = command.ExecuteReader())
-                {
-                    while (reader.Read())
-                    {
-                        if (!reader.IsDBNull(0)) 
-                        {
-                            k += reader.GetString(0);
-                        }
-                    }
-                }
-                connection.Close();
-            }
-
             try
             {
-                List<Product> products = JsonSerializer.Deserialize<List<Product>>(k);
-                return products;
+                string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+
+                string k = "";
+                using (var connection = new NpgsqlConnection(connectionString))
+                {
+                    connection.Open();
+                    var command = new NpgsqlCommand("SELECT get_products_json();", connection);
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            if (!reader.IsDBNull(0)) 
+                            {
+                                k += reader.GetString(0);
+                            }
+                        }
+                    }
+                    connection.Close();
+                }
+
+
+                return k;
             }
             catch (Exception e)
             {
-                return new List<Product>();
+                return "ERR";
             }
         }
 
         [HttpGet]
         [Route("categories")]
-        public List<Category> GetCategories()
+        // api/products/categories
+        public string GetCategories()
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+             try
+             {
+                string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
 
-            string k = "";
-            using (var connection = new NpgsqlConnection(connectionString))
-            {
-                connection.Open();
-                var command = new NpgsqlCommand("SELECT get_categories_json();", connection);
-                using (var reader = command.ExecuteReader())
+                string k = "";
+                using (var connection = new NpgsqlConnection(connectionString))
                 {
-                    while (reader.Read())
+                    connection.Open();
+                    var command = new NpgsqlCommand("SELECT get_categories_json();", connection);
+                    using (var reader = command.ExecuteReader())
                     {
-                        if (!reader.IsDBNull(0)) 
+                        while (reader.Read())
                         {
-                            k += reader.GetString(0);
+                            if (!reader.IsDBNull(0)) 
+                            {
+                                k += reader.GetString(0);
+                            }
                         }
                     }
+                    connection.Close();
                 }
-                connection.Close();
-            }
-
-            try
-            {
-                List<Category> categories = JsonSerializer.Deserialize<List<Category>>(k);
-                return categories;
+                return k;
             }
             catch (Exception e)
             {
-                return new List<Category>();
+                return "ERR";
             }
         }
 
         [HttpGet]
-        public List<Product> GetProductsByUser([FromUri] int u_id = 1)
+        // api/products?u_id=5
+        public string GetProductsByUser([FromUri] int u_id = 1)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            try {
+                string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
 
-            string k = "";
-            using (var connection = new NpgsqlConnection(connectionString))
-            {
-                connection.Open();
-                var command = new NpgsqlCommand($"SELECT get_products_by_user_json({u_id});", connection);
-                using (var reader = command.ExecuteReader())
+                string k = "";
+                using (var connection = new NpgsqlConnection(connectionString))
                 {
-                    while (reader.Read())
+                    connection.Open();
+                    var command = new NpgsqlCommand($"SELECT get_products_by_user_json({u_id});", connection);
+                    using (var reader = command.ExecuteReader())
                     {
-                        if (!reader.IsDBNull(0)) 
+                        while (reader.Read())
                         {
-                            k += reader.GetString(0);
+                            if (!reader.IsDBNull(0)) 
+                            {
+                                k += reader.GetString(0);
+                            }
                         }
                     }
+                    connection.Close();
                 }
-                connection.Close();
-            }
 
-            try
-            {
-                List<Product> products = JsonSerializer.Deserialize<List<Product>>(k);
-                return products;
+                return k;
             }
             catch (Exception e)
             {
-                return new List<Product>();
+                return "ERR";
             }
         }
 
         [HttpGet]
-        public List<Product> GetProductsByStatus([FromUri] String status)
+        // api/products?status=hhh
+        public string GetProductsByStatus([FromUri] String status)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
-
-            string k = "";
-            using (var connection = new NpgsqlConnection(connectionString))
-            {
-                connection.Open();
-                var command = new NpgsqlCommand($"SELECT get_products_by_status_json('{status}');", connection);
-                using (var reader = command.ExecuteReader())
-                {
-                    while (reader.Read())
-                    {
-                        if (!reader.IsDBNull(0)) 
-                        {
-                            k += reader.GetString(0);
-                        }
-                    }
-                }
-                connection.Close();
-            }
-
             try
             {
-                List<Product> products = JsonSerializer.Deserialize<List<Product>>(k);
-                return products;
+                string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+
+                string k = "";
+                using (var connection = new NpgsqlConnection(connectionString))
+                {
+                    connection.Open();
+                    var command = new NpgsqlCommand($"SELECT get_products_by_status_json('{status}');", connection);
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            if (!reader.IsDBNull(0)) 
+                            {
+                                k += reader.GetString(0);
+                            }
+                        }
+                    }
+                    connection.Close();
+                }            
+                return k;
             }
             catch (Exception e)
             {
-                return new List<Product>();
+                return "ERR";
             }
         }
 
         [HttpGet]
-        public List<Product> GetProductsByCategory([FromUri] String category)
+        // api/products?category=5
+        public string GetProductsByCategory([FromUri] int category)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            try { 
 
-            string k = "";
-            using (var connection = new NpgsqlConnection(connectionString))
-            {
-                connection.Open();
-                var command = new NpgsqlCommand($"SELECT get_products_by_category_json('{category}');", connection);
-                using (var reader = command.ExecuteReader())
+                string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+
+                string k = "";
+                using (var connection = new NpgsqlConnection(connectionString))
                 {
-                    while (reader.Read())
+                    connection.Open();
+                    var command = new NpgsqlCommand($"SELECT get_products_by_category_json({category});", connection);
+                    using (var reader = command.ExecuteReader())
                     {
-                        if (!reader.IsDBNull(0))
+                        while (reader.Read())
                         {
-                            k += reader.GetString(0);
+                            if (!reader.IsDBNull(0))
+                            {
+                                k += reader.GetString(0);
+                            }
                         }
                     }
+                    connection.Close();
                 }
-                connection.Close();
-            }
-
-            try
-            {
-                List<Product> products = JsonSerializer.Deserialize<List<Product>>(k);
-                return products;
+                return k;
             }
             catch (Exception e)
             {
-                return new List<Product>();
+                return "ERR";
             }
         }
 
 
         [HttpGet]
-        public Product GetProductByLot([FromUri] int lot_id)
+        // api/products?lot_id=1
+        public string GetProductByLot([FromUri] int lot_id)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            try{
+                string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
 
-            string k = "";
-            using (var connection = new NpgsqlConnection(connectionString))
-            {
-                connection.Open();
-                var command = new NpgsqlCommand($"SELECT get_product_by_lot_json('{lot_id}');", connection);
-                using (var reader = command.ExecuteReader())
+                string k = "";
+                using (var connection = new NpgsqlConnection(connectionString))
                 {
-                    while (reader.Read())
+                    connection.Open();
+                    var command = new NpgsqlCommand($"SELECT get_product_by_lot_json('{lot_id}');", connection);
+                    using (var reader = command.ExecuteReader())
                     {
-                        if (!reader.IsDBNull(0))
+                        while (reader.Read())
                         {
-                            k += reader.GetString(0);
+                            if (!reader.IsDBNull(0))
+                            {
+                                k += reader.GetString(0);
+                            }
                         }
                     }
+                    connection.Close();
                 }
-                connection.Close();
-            }
 
-            try
-            {
-                Product products = JsonSerializer.Deserialize<Product>(k);
-                return products;
+                return k;
             }
             catch (Exception e)
             {
-                return null;
+                return "ERR";
             }
         }
 
 
         [HttpGet]
         [Route("{id:int}")]
-        public Product GetProduct(int id)
+        // api/products/5
+        public string GetProduct(int id)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            try { 
+                string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
 
-            string k = "";
-            using (var connection = new NpgsqlConnection(connectionString))
-            {
-                connection.Open();
-                var command = new NpgsqlCommand($"SELECT get_products_by_id_json({id});", connection);
-                using (var reader = command.ExecuteReader())
+                string k = "";
+                using (var connection = new NpgsqlConnection(connectionString))
                 {
-                    while (reader.Read())
+                    connection.Open();
+                    var command = new NpgsqlCommand($"SELECT get_products_by_id_json({id});", connection);
+                    using (var reader = command.ExecuteReader())
                     {
-                        if (!reader.IsDBNull(0)) // 0 - индекс первого столбца
+                        while (reader.Read())
                         {
-                            k += reader.GetString(0);
+                            if (!reader.IsDBNull(0)) // 0 - индекс первого столбца
+                            {
+                                k += reader.GetString(0);
+                            }
                         }
                     }
+                    connection.Close();
                 }
-                connection.Close();
-            }
 
-            try
-            {
-                Product product = JsonSerializer.Deserialize<Product>(k);
-                return product;
+                return k;
             }
             catch (Exception e)
             {
-                return null;
+                return "ERR";
             }
         }
 
         [HttpPost]
         [Route("delete/{id:int}")]
-        public bool DeleteProduct(int id)
+        // api/products/delete/5
+        public string DeleteProduct(int id)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            try { 
+                string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
 
-            string k = "";
-            using (var connection = new NpgsqlConnection(connectionString))
-            {
-                connection.Open();
-
-                var command = new NpgsqlCommand($"SELECT delete_product({id});", connection);
-                using (var reader = command.ExecuteReader())
+                string k = "";
+                using (var connection = new NpgsqlConnection(connectionString))
                 {
-                    while (reader.Read())
+                    connection.Open();
+
+                    var command = new NpgsqlCommand($"SELECT delete_product({id});", connection);
+                    using (var reader = command.ExecuteReader())
                     {
-                        if (!reader.IsDBNull(0)) // 0 - индекс первого столбца
+                        while (reader.Read())
                         {
-                            k += reader.GetString(0);
+                            if (!reader.IsDBNull(0)) // 0 - индекс первого столбца
+                            {
+                                k += reader.GetString(0);
+                            }
                         }
                     }
+                    connection.Close();
                 }
-                connection.Close();
-            }
-            try
-            {
-                BoolResult success = JsonSerializer.Deserialize<BoolResult>(k);
-                return success.success;
+                return k;
             }
             catch (Exception e)
             {
-                return false;
+                return "{\"success\" : false}";
             }
         }
 
         [HttpPost]
         [Route("confiscate/{id:int}")]
-        public bool ConfiscateProduct(int id, [FromUri] int u_id = 1)
+        // api/products/confiscate/1?u_id=1
+        public string ConfiscateProduct(int id, [FromUri] int u_id = 1)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            try { 
+                string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
 
-            string k = "";
-            using (var connection = new NpgsqlConnection(connectionString))
-            {
-                connection.Open();
-
-                var command = new NpgsqlCommand($"SELECT confiscate_product({id}, {u_id});", connection);
-                using (var reader = command.ExecuteReader())
+                string k = "";
+                using (var connection = new NpgsqlConnection(connectionString))
                 {
-                    while (reader.Read())
+                    connection.Open();
+
+                    var command = new NpgsqlCommand($"SELECT confiscate_product({id}, {u_id});", connection);
+                    using (var reader = command.ExecuteReader())
                     {
-                        if (!reader.IsDBNull(0))
+                        while (reader.Read())
                         {
-                            k += reader.GetString(0);
+                            if (!reader.IsDBNull(0))
+                            {
+                                k += reader.GetString(0);
+                            }
                         }
                     }
+                    connection.Close();
                 }
-                connection.Close();
-            }
-            try
-            {
-                BoolResult success = JsonSerializer.Deserialize<BoolResult>(k);
-                return success.success;
+                return k;
             }
             catch (Exception e)
             {
-                return false;
+                return "{\"success\" : false}";
             }
         }
 
         [HttpPost]
         [Route("offer/{id:int}")]
-        public bool OfferProduct(int id)
+        // api/products/offer/5
+        public string OfferProduct(int id)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            try { 
+                string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
 
-            string k = "";
-            using (var connection = new NpgsqlConnection(connectionString))
-            {
-                connection.Open();
-
-                var command = new NpgsqlCommand($"SELECT offer_product({id});", connection);
-                using (var reader = command.ExecuteReader())
+                string k = "";
+                using (var connection = new NpgsqlConnection(connectionString))
                 {
-                    while (reader.Read())
+                    connection.Open();
+
+                    var command = new NpgsqlCommand($"SELECT offer_product({id});", connection);
+                    using (var reader = command.ExecuteReader())
                     {
-                        if (!reader.IsDBNull(0))
+                        while (reader.Read())
                         {
-                            k += reader.GetString(0);
+                            if (!reader.IsDBNull(0))
+                            {
+                                k += reader.GetString(0);
+                            }
                         }
                     }
+                    connection.Close();
                 }
-                connection.Close();
-            }
-            try
-            {
-                BoolResult success = JsonSerializer.Deserialize<BoolResult>(k);
-                return success.success;
+                    return k;
             }
             catch (Exception e)
             {
-                return false;
+                return "{\"success\" : false}"; 
             }
         }
 
         [HttpPost]
         [Route("send/{id:int}_aid={aid:int}_bet={bet:double}")]
-        public bool SendToAuction(int id, int aid, double bet)
+        // api/products/send/15_aid=1_bet=122.222
+        public string SendToAuction(int id, int aid, double bet)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            try { 
+                string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
 
-            string k = "";
-            using (var connection = new NpgsqlConnection(connectionString))
-            {
-                connection.Open();
-
-                var command = new NpgsqlCommand($"SELECT send_product_to_auction({id}, {aid}, {bet.ToString().Replace(',', '.')});", connection);
-                using (var reader = command.ExecuteReader())
+                string k = "";
+                using (var connection = new NpgsqlConnection(connectionString))
                 {
-                    while (reader.Read())
+                    connection.Open();
+
+                    var command = new NpgsqlCommand($"SELECT send_product_to_auction({id}, {aid}, {bet.ToString().Replace(',', '.')});", connection);
+                    using (var reader = command.ExecuteReader())
                     {
-                        if (!reader.IsDBNull(0))
+                        while (reader.Read())
                         {
-                            k += reader.GetString(0);
+                            if (!reader.IsDBNull(0))
+                            {
+                                k += reader.GetString(0);
+                            }
                         }
                     }
+                    connection.Close();
                 }
-                connection.Close();
-            }
-            try
-            {
-                BoolResult success = JsonSerializer.Deserialize<BoolResult>(k);
-                return success.success;
+                return k;
             }
             catch (Exception e)
             {
-                return false;
+                return "{\"success\" : false}";
             }
         }
 
         [HttpPost]
         [Route("add")]
-        public bool AddProduct([FromUri] int u_id = 1, [FromUri] int cat_id = 1, [FromUri] String status = "normal",
+        // api/products/add?u_id=1&cat_id=1&name=prprpr&description=fignyakakayato
+        public string AddProduct([FromUri] int u_id = 1, [FromUri] int cat_id = 1, [FromUri] String status = "normal",
             [FromUri] String name = null, [FromUri] String description = null)
         {
-            if (name == null || description == null) return false;
-            string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            try { 
+                if (name == null || description == null) return "{\"success\" : false}";
+                string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
 
-            string k = "";
-            using (var connection = new NpgsqlConnection(connectionString))
-            {
-                connection.Open();
-
-                var command = new NpgsqlCommand($"SELECT add_product({u_id}, {cat_id}, '{status}', '{name}', '{description}');", connection);
-                using (var reader = command.ExecuteReader())
+                string k = "";
+                using (var connection = new NpgsqlConnection(connectionString))
                 {
-                    while (reader.Read())
+                    connection.Open();
+
+                    var command = new NpgsqlCommand($"SELECT add_product({u_id}, {cat_id}, '{status}', '{name}', '{description}');", connection);
+                    using (var reader = command.ExecuteReader())
                     {
-                        if (!reader.IsDBNull(0)) // 0 - индекс первого столбца
+                        while (reader.Read())
                         {
-                            k += reader.GetString(0);
+                            if (!reader.IsDBNull(0)) // 0 - индекс первого столбца
+                            {
+                                k += reader.GetString(0);
+                            }
                         }
                     }
+                    connection.Close();
                 }
-                connection.Close();
-            }
-            try
-            {
-                BoolResult success = JsonSerializer.Deserialize<BoolResult>(k);
-                return success.success;
+                return k;
             }
             catch (Exception e)
             {
-                return false;
+                return "{\"success\" : false}";
             }
         }
 
